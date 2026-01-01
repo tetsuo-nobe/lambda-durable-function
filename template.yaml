@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  durable-carloan
+
+Globals:
+  Function:
+    Timeout: 30
+
+Resources:
+### IAM ロールとポリシー
+  ApproverFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName : !Sub "${AWS::StackName}-ApproverFunctionRole"
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+  ApproverFunctionRolePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              -  "lambda:SendDurableExecutionCallbackSuccess"
+              -  "lambda:SendDurableExecutionCallbackFailure"
+            Effect: Allow
+            Resource: 
+              - '*'
+        Version:  "2012-10-17"
+      PolicyName: !Sub "${AWS::StackName}-ApproverFunctionRolePolicy"
+      Roles:
+        - Ref: ApproverFunctionRole
+### 関数
+  DurableFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-Durable-function"
+      CodeUri: functions/durable
+      Handler: app.lambda_handler
+      Runtime: python3.14
+      Architectures:
+        - x86_64
+      DurableConfig:
+        ExecutionTimeout: 1800
+  ApproverFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-Approver-function"
+      CodeUri: functions/approver
+      Handler: app.lambda_handler
+      Runtime: python3.14
+      Architectures:
+        - x86_64
+      Role: !GetAtt ApproverFunctionRole.Arn
