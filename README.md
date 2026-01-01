@@ -1,4 +1,4 @@
-# AWS Lambda Durable Function のデモ
+# AWS Lambda Durable Function のサンプル
 
 ## 前提
 
