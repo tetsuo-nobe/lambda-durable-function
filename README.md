@@ -10,7 +10,8 @@
 
 * カーローンの利率見積りと審査を行うフローを AWS Lambda Durable Function で実装
 
-図
+<img width="878" height="427" alt="durable_function" src="https://github.com/user-attachments/assets/9a8d3b43-6ac5-4387-9cb6-90b0bfe8b5b1" />
+
 
 ---
 
