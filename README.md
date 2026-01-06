@@ -73,11 +73,11 @@
 1. Approver-function を下記のようなイベントオブジェクトで実行し、手動承認を行いコールバックする。
     - マネジメントコンソールのテスト機能を使っても良い。
     - `xxx` の部分はメモしておいた callback_id の値に置き換える。
-```
-{
-  "callback_id": "XXX"
-}
-```
+  ```
+  {
+    "callback_id": "XXX"
+  }
+  ```
 1. マネジメントコンソールでのテスト結果または CloudWatch Logs のログでフローの完了を確認する。
    - 再び `"type":"platform.start"` のログと `"type": "platform.report"` のログが出力されていることがわかる。
    - つまり、再び Lambda 関数が実行されたことがわかる。
